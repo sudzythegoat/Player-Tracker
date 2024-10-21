@@ -14,7 +14,6 @@ namespace SteveModTemplate
     {
         public static Plugin Instance { get; private set; } // Singleton instance for easy access
         public static bool IsEnabled { get; private set; } // Tracks if the mod is enabled
-        public static bool IsRoomModded { get; private set; } // Tracks if you are in a modded code or not.
 
         // Initializing event subscriptions
         public void Start()
@@ -52,13 +51,80 @@ namespace SteveModTemplate
         // Called when the game is initialized, ideal for loading assets
         public void OnGameInitialized(object sender, EventArgs e)
         {
-            // Insert asset loading or initialization code here
+            Track();
+        }
+        public static void JoinRoom()
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.Disconnect();
+                CoroutineManager.RunCoroutine(JoinRandomDelay());
+                return;
+            }
+
+            string gamemode = PhotonNetworkController.Instance.currentJoinTrigger.networkZone;
+
+            if (gamemode == "forest")
+            {
+                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Forest, Tree Exit").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
+            }
+            if (gamemode == "city")
+            {
+                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - City Front").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
+            }
+            if (gamemode == "canyons")
+            {
+                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Canyon").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
+            }
+            if (gamemode == "mountains")
+            {
+                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Mountain For Computer").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
+            }
+            if (gamemode == "beach")
+            {
+                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Beach from Forest").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
+            }
+            if (gamemode == "sky")
+            {
+                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Clouds").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
+            }
+            if (gamemode == "basement")
+            {
+                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Basement For Computer").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
+            }
+            if (gamemode == "caves")
+            {
+                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Cave").GetComponent<GorillaNetworkJoinTrigger>();
+            }
         }
 
+        public static IEnumerator JoinRandomDelay()
+        {
+            yield return new WaitForSeconds(1f);
+            JoinRoom();
+        }
+        
+        public static void Track()
+        {
+            while (true)
+            {
+                JoinRoom();
+                foreach (var player in PhotonNetwork.PlayerList)
+                {
+                    if (trackable.Contains(player.Nickname))
+                    {
+                        tracked = $"@everyone {player.Nickname} found in code {PhotonNetwork.CurrentRoom.Name}\n-# Tracked with Name Tracker"
+                        SendMessage(tracked);
+                    }
+                    else if (!trackable.Contains(player.Nickname)) { break; }
+                }
+            }
+        }
+        
         // Called once per frame, useful for updates
         public void Update()
         {
-            IsRoomModded = PhotonNetwork.InRoom && PhotonNetwork.CurrentRoom.CustomProperties.ToString().Contains("MODDED"); // Checks if the lobby is modded.
+            //no
         }
     }
 
@@ -66,8 +132,8 @@ namespace SteveModTemplate
     public class PluginInfo
     {
         internal const string
-            GUID = "Steve.SteveModTemplate", // Unique identifier for the mod
-            Name = "SteveModTemplate", // Display name of your mod
-            Version = "1.0.0"; // Current version of your mod
+            GUID = "Sudzy.NameTracker", // Unique identifier for the mod
+            Name = "NameTracker", // Display name of your mod
+            Version = "1.0.1"; // Current version of your mod
     }
 }
