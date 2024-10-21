@@ -48,6 +48,11 @@ namespace SteveModTemplate
             }
         }
 
+        public static void SendMessage(message)
+        {
+            //ntc
+        }
+        
         // Called when the game is initialized, ideal for loading assets
         public void OnGameInitialized(object sender, EventArgs e)
         {
