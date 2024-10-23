@@ -69,7 +69,7 @@ namespace SteveModTemplate
         {
             while (true)
             {
-                JoinRoom();
+                Hop();
                 foreach (var player in PhotonNetwork.PlayerList)
                 {
                     if (trackable.Contains(player.Nickname))
@@ -77,7 +77,7 @@ namespace SteveModTemplate
                         tracked = $"@everyone {player.Nickname} found in code {PhotonNetwork.CurrentRoom.Name}\n-# Tracked with Name Tracker"
                         SendMessage(tracked);
                     }
-                    else if (!trackable.Contains(player.Nickname)) { break; }
+                    else if (!trackable.Contains(player.Nickname)) { continue; }
                 }
             }
         }
