@@ -58,55 +58,11 @@ namespace SteveModTemplate
         {
             Track();
         }
-        public static void JoinRoom()
+        public static IEnumerator Hop()
         {
-            if (PhotonNetwork.InRoom)
-            {
-                PhotonNetwork.Disconnect();
-                CoroutineManager.RunCoroutine(JoinRandomDelay());
-                return;
-            }
-
-            string gamemode = PhotonNetworkController.Instance.currentJoinTrigger.networkZone;
-
-            if (gamemode == "forest")
-            {
-                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Forest, Tree Exit").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
-            }
-            if (gamemode == "city")
-            {
-                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - City Front").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
-            }
-            if (gamemode == "canyons")
-            {
-                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Canyon").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
-            }
-            if (gamemode == "mountains")
-            {
-                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Mountain For Computer").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
-            }
-            if (gamemode == "beach")
-            {
-                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Beach from Forest").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
-            }
-            if (gamemode == "sky")
-            {
-                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Clouds").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
-            }
-            if (gamemode == "basement")
-            {
-                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Basement For Computer").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
-            }
-            if (gamemode == "caves")
-            {
-                GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Cave").GetComponent<GorillaNetworkJoinTrigger>();
-            }
-        }
-
-        public static IEnumerator JoinRandomDelay()
-        {
-            yield return new WaitForSeconds(1f);
-            JoinRoom();
+            PhotonNetwork.Disconnect();
+            yield return new WaitForSeconds(1500);
+            GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Forest, Tree Exit").GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
         }
         
         public static void Track()
